@@ -1,0 +1,5 @@
+{
+    "require": {
+        "teamtnt/tntsearch": "^3.0"
+    }
+}

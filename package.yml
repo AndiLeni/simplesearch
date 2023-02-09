@@ -1,0 +1,22 @@
+package: "simplesearch" 
+version: "1.0.0" 
+author: Andreas Lenhardt
+
+page:
+    title: "Einfache Suche" 
+    icon: rex-icon fa-search
+    perm: admin
+    subpages:
+        home:
+            title: "Home"
+        search:
+            title: "Suche testen"
+        build:
+            title: "Artikel indizieren oder updaten"
+
+
+requires:
+    redaxo: "^5.12"
+    php:
+        version: ">=8.0, <9"
+
