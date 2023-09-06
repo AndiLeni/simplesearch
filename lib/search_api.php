@@ -12,7 +12,8 @@ class rex_api_simplesearch extends rex_api_function
 
         $query = rex_request('query', 'string', '');
 
-        $result = Search::search($query);
+        $search = new Search();
+        $result = $search->search($query);
 
         exit(json_encode($result));
     }
