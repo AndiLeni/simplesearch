@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit95834505e49ae4948c6c4776aada8cdc
+class ComposerStaticInit30359c11b07c87d455540c1b58bad68d
 {
     public static $files = array (
         'b46ad4fe52f4d1899a2951c7e6ea56b0' => __DIR__ . '/..' . '/voku/portable-utf8/bootstrap.php',
@@ -105,9 +105,9 @@ class ComposerStaticInit95834505e49ae4948c6c4776aada8cdc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit95834505e49ae4948c6c4776aada8cdc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit95834505e49ae4948c6c4776aada8cdc::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit95834505e49ae4948c6c4776aada8cdc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit30359c11b07c87d455540c1b58bad68d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit30359c11b07c87d455540c1b58bad68d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit30359c11b07c87d455540c1b58bad68d::$classMap;
 
         }, null, ClassLoader::class);
     }

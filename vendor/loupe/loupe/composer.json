@@ -1,0 +1,49 @@
+{
+    "name": "loupe/loupe",
+    "description": "A full text search engine with tokenization, stemming, typo tolerance, filters and geo support based on only PHP and SQLite",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Loupe\\Loupe\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Loupe\\Loupe\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Yanick Witschi",
+            "email": "yanick.witschi@terminal42.ch"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "ext-intl": "*",
+        "doctrine/dbal": "^3.6",
+        "wamania/php-stemmer": "^3.0",
+        "doctrine/lexer": "^2.0 || ^3.0",
+        "voku/portable-utf8": "^6.0",
+        "mjaschen/phpgeo": "^4.2",
+        "toflar/state-set-index": "^1.0",
+        "psr/log": "^3.0",
+        "nitotm/efficient-language-detector": "^2.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.2",
+        "symfony/filesystem": "^6.2",
+        "symplify/easy-coding-standard": "11.2.4.72",
+        "symfony/finder": "^6.2",
+        "phpunit/phpunit": "^10.0",
+        "phpstan/phpstan": "^1.10"
+    },
+    "scripts": {
+        "tests": "@php vendor/bin/phpunit",
+        "unit-tests": "@php vendor/bin/phpunit --testsuite=unit",
+        "functional-tests": "@php vendor/bin/phpunit --testsuite=functional",
+        "cs-fixer": "@php vendor/bin/ecs check --fix",
+        "phpstan": "@php vendor/bin/phpstan analyse"
+    }
+}
