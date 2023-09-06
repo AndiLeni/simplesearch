@@ -5,8 +5,11 @@ use AndiLeni\search\Search;
 
 if (rex::isBackend()) {
     rex_extension::register('ART_CONTENT_UPDATED', function ($ep) {
+        $article =  $ep->getArticle();
+        $article_id = $article->getId();
+
         $search = new Search;
-        $search->update_article_ep($ep);
+        $search->update_article($article_id);
     });
 
     rex_extension::register('CAT_STATUS', function ($ep) {

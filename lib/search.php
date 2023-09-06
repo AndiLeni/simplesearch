@@ -35,29 +35,6 @@ class Search
         return $article->getUrl();
     }
 
-    public function update_article_ep(rex_extension_point_art_content_updated $ep): void
-    {
-        $article =  $ep->getArticle();
-        $article_id = $article->getId();
-        $name = $article->getName();
-
-        $content = $this->get_article_content($article_id);
-
-        if ($content != '') {
-            $this->loupe->addDocument([
-                'id' => $article_id,
-                'name' => $name,
-                'content' => $content,
-            ]);
-        } else {
-            $this->loupe->addDocument([
-                'id' => $article_id,
-                'name' => $name,
-                'content' => "-",
-            ]);
-        }
-    }
-
     public function update_article(int $article_id): void
     {
         $content = $this->get_article_content($article_id);
