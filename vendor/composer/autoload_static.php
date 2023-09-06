@@ -4,23 +4,97 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc58dbd53802e240dcf2aa495a8ffcbfa
+class ComposerStaticInit95834505e49ae4948c6c4776aada8cdc
 {
     public static $files = array (
-        '290dd4ba42f11019134caca05dbefe3f' => __DIR__ . '/..' . '/teamtnt/tntsearch/helper/helpers.php',
+        'b46ad4fe52f4d1899a2951c7e6ea56b0' => __DIR__ . '/..' . '/voku/portable-utf8/bootstrap.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        'v' => 
+        array (
+            'voku\\' => 5,
+        ),
+        'W' => 
+        array (
+            'Wamania\\Snowball\\' => 17,
+        ),
         'T' => 
         array (
-            'TeamTNT\\TNTSearch\\' => 18,
+            'Toflar\\StateSetIndex\\' => 21,
+        ),
+        'P' => 
+        array (
+            'Psr\\Cache\\' => 10,
+        ),
+        'N' => 
+        array (
+            'Nitotm\\Eld\\' => 11,
+        ),
+        'L' => 
+        array (
+            'Loupe\\Loupe\\' => 12,
+            'Location\\' => 9,
+        ),
+        'D' => 
+        array (
+            'Doctrine\\Deprecations\\' => 22,
+            'Doctrine\\DBAL\\' => 14,
+            'Doctrine\\Common\\Lexer\\' => 22,
+            'Doctrine\\Common\\Cache\\' => 22,
+            'Doctrine\\Common\\' => 16,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'TeamTNT\\TNTSearch\\' => 
+        'voku\\' => 
         array (
-            0 => __DIR__ . '/..' . '/teamtnt/tntsearch/src',
+            0 => __DIR__ . '/..' . '/voku/portable-utf8/src/voku',
+            1 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
+        ),
+        'Wamania\\Snowball\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wamania/php-stemmer/src',
+        ),
+        'Toflar\\StateSetIndex\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/toflar/state-set-index/src',
+        ),
+        'Psr\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/cache/src',
+        ),
+        'Nitotm\\Eld\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nitotm/efficient-language-detector/src',
+        ),
+        'Loupe\\Loupe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/loupe/loupe/src',
+        ),
+        'Location\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mjaschen/phpgeo/src',
+        ),
+        'Doctrine\\Deprecations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/deprecations/lib/Doctrine/Deprecations',
+        ),
+        'Doctrine\\DBAL\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/dbal/src',
+        ),
+        'Doctrine\\Common\\Lexer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/lexer/src',
+        ),
+        'Doctrine\\Common\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
+        ),
+        'Doctrine\\Common\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/event-manager/src',
         ),
     );
 
@@ -31,9 +105,9 @@ class ComposerStaticInitc58dbd53802e240dcf2aa495a8ffcbfa
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc58dbd53802e240dcf2aa495a8ffcbfa::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc58dbd53802e240dcf2aa495a8ffcbfa::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc58dbd53802e240dcf2aa495a8ffcbfa::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit95834505e49ae4948c6c4776aada8cdc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit95834505e49ae4948c6c4776aada8cdc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit95834505e49ae4948c6c4776aada8cdc::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -1,31 +1,11 @@
 <?php
 
-use TeamTNT\TNTSearch\TNTSearch;
 use AndiLeni\search\Search;
 
 $reindex = rex_get('reindex', 'boolean', false);
 $offset = rex_post('offset', 'int', 1);
 
-// TODO
-// offset einbauen
-// offline artikel berücksichtigen
-
-$db_config = rex::getDbConfig(1);
-
-$tnt = new TNTSearch;
-
-$tnt->loadConfig([
-    'driver'    => 'mysql',
-    'host'      => $db_config->host,
-    'database'  => $db_config->name,
-    'username'  => $db_config->login,
-    'password'  => $db_config->password,
-    'storage'   => rex_path::addonData('simplesearch'),
-    'stemmer'   => \TeamTNT\TNTSearch\Stemmer\GermanStemmer::class //optional
-]);
-
-$tnt->selectIndex("articles.index");
-$index = $tnt->getIndex();
+$search = new Search();
 
 if ($reindex) {
 
@@ -43,7 +23,7 @@ if ($reindex) {
     $start = microtime(true);
 
     foreach ($article_ids as $aid) {
-        Search::update_article($aid);
+        $search->update_article($aid);
     }
 
     $stop = microtime(true);
@@ -57,6 +37,12 @@ $sql = rex_sql::factory();
 $res = $sql->getArray('SELECT COUNT(DISTINCT id) as total FROM rex_article');
 $num_total_articles = $res[0]['total'];
 
+$res = $sql->getArray('SELECT COUNT(DISTINCT article_id) as total FROM rex_article_slice');
+$num_total_articles_slice = $res[0]['total'];
+
+$num_indexed = $search->loupe->countDocuments();
+
+
 
 ?>
 
@@ -66,8 +52,8 @@ $num_total_articles = $res[0]['total'];
     </header>
 
     <div class="panel-body">
-        <p>Aktuell sind <b><?= $tnt->totalDocumentsInCollection() ?></b> Artikel indiziert.</p>
-        <p style="margin-bottom: 0;">Insgesamt sind <b><?= $num_total_articles ?></b> Artikel auf dieser Webseite vorhanden.</p>
+        <p>Aktuell sind <b><?= $num_indexed ?></b> Artikel indiziert.</p>
+        <p style="margin-bottom: 0;">Insgesamt sind <b><?= $num_total_articles ?></b> Artikel auf dieser Webseite vorhanden, <b><?= $num_total_articles_slice ?></b> davon haben Inhalte.</p>
     </div>
 </div>
 
@@ -87,5 +73,15 @@ $num_total_articles = $res[0]['total'];
                 <button class="btn btn-primary" type="submit">Alle Artikel neu indizieren</button>
             </div>
         </form>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <header class="panel-heading">
+        <div class="panel-title">Funktionen</div>
+    </header>
+
+    <div class="panel-body">
+        <p>SQLite Version: <?= SQLite3::version()['versionString'] ?></p>
     </div>
 </div>

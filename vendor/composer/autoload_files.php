@@ -6,5 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    '290dd4ba42f11019134caca05dbefe3f' => $vendorDir . '/teamtnt/tntsearch/helper/helpers.php',
+    'b46ad4fe52f4d1899a2951c7e6ea56b0' => $vendorDir . '/voku/portable-utf8/bootstrap.php',
 );

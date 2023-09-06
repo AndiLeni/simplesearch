@@ -6,35 +6,21 @@ $query = rex_post('query', 'string', '');
 
 if ($query !== '') {
 
+    $search = new Search();
 
-    $res = Search::search($query);
+    $res = $search->search($query);
+
     dump($res);
 
     $results_html = '';
-    foreach ($res['ids'] as $hits) {
-        $results_html .= '<h3>' . Search::get_article_name($hits) . '</h3>';
-        $results_html .= '<a href="' . Search::get_article_url($hits) . '">zum Artikel</a>';
+    foreach ($res['hits'] as $hit) {
+        $results_html .= '<h3>' . $hit["name"] . '</h3>';
+        $results_html .= '<a href="' . $search->get_article_url($hit["id"]) . '">zum Artikel</a>';
         $results_html .= '<hr>';
     }
 
     $fragment = new rex_fragment();
     $fragment->setVar('title', 'Suchergebnisse - Exakte Suche', false);
-    $fragment->setVar('body', $results_html, false);
-    echo $fragment->parse('core/page/section.php');
-
-
-    $res = Search::search_fuzzy($query);
-    dump($res);
-
-    $results_html = '';
-    foreach ($res['ids'] as $hits) {
-        $results_html .= '<h3>' . Search::get_article_name($hits) . '</h3>';
-        $results_html .= '<a href="' . Search::get_article_url($hits) . '">zum Artikel</a>';
-        $results_html .= '<hr>';
-    }
-
-    $fragment = new rex_fragment();
-    $fragment->setVar('title', 'Suchergebnisse - Fuzzy Suche', false);
     $fragment->setVar('body', $results_html, false);
     echo $fragment->parse('core/page/section.php');
 }

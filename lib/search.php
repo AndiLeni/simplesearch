@@ -8,70 +8,79 @@ use rex_article_content;
 use rex_extension_point_art_content_updated;
 use rex_logger;
 use rex_path;
-use TeamTNT\TNTSearch\TNTSearch;
+use Loupe\Loupe\Config\TypoTolerance;
+use Loupe\Loupe\Configuration;
+use Loupe\Loupe\LoupeFactory;
+use Loupe\Loupe\SearchParameters;
 
 class Search
 {
 
-    public static function get_article_name(int $article_id): string
+    public $loupe;
+
+    public function __construct()
+    {
+        $this->loupe = $this->getLoupe();
+    }
+
+    public function get_article_name(int $article_id): string
     {
         $article = rex_article::get($article_id);
         return $article->getName();
     }
 
-    public static function get_article_url(int $article_id): string
+    public function get_article_url(int $article_id): string
     {
         $article = rex_article::get($article_id);
         return $article->getUrl();
     }
 
-    public static function update_article_ep(rex_extension_point_art_content_updated $ep): void
+    public function update_article_ep(rex_extension_point_art_content_updated $ep): void
     {
-        $tnt = Search::get_tntsearch();
-        $index = $tnt->getIndex();
-
         $article =  $ep->getArticle();
         $article_id = $article->getId();
+        $name = $article->getName();
 
-        rex_logger::logError(2, strval($article_id), '', 1);
-
-        $content = Search::get_article_content($article_id);
+        $content = $this->get_article_content($article_id);
 
         if ($content != '') {
-            $index->update($article_id, ['id' => $article_id, 'content' => $content]);
+            $this->loupe->addDocument([
+                'id' => $article_id,
+                'name' => $name,
+                'content' => $content,
+            ]);
         } else {
-            $index->update($article_id, ['id' => $article_id, 'content' => '-']);
+            $this->loupe->addDocument([
+                'id' => $article_id,
+                'name' => $name,
+                'content' => "-",
+            ]);
         }
     }
 
-    public static function update_article(int $article_id): void
+    public function update_article(int $article_id): void
     {
-        $tnt = Search::get_tntsearch();
-        $index = $tnt->getIndex();
+        $content = $this->get_article_content($article_id);
 
-        $content = Search::get_article_content($article_id);
+        $article = rex_article::get($article_id);
+        $name = $article->getName();
 
         if ($content != '') {
-            $index->update($article_id, ['id' => $article_id, 'content' => $content]);
+            $this->loupe->addDocument([
+                'id' => $article_id,
+                'name' => $name,
+                'content' => $content,
+            ]);
         } else {
-            $index->update($article_id, ['id' => $article_id, 'content' => '-']);
+            $this->loupe->addDocument([
+                'id' => $article_id,
+                'name' => $name,
+                'content' => "-",
+            ]);
         }
-
-
-        // $article = rex_article::get($article_id);
-        // $article_online = $article->isOnline();
-
-        // if ($article_online) {
-        //     // if article is online update index
-        //     $content = Search::get_article_content($article_id);
-        //     $index->update($article_id, ['id' => $article_id, 'content' => $content]);
-        // } else {
-        //     // delete from index
-        //     $index->delete($article_id);
-        // }
     }
 
-    public static function get_article_content(int $article_id): string
+    public function get_article_content(int $article_id): string
     {
         $article_content = new rex_article_content($article_id);
 
@@ -83,62 +92,42 @@ class Search
         return $content;
     }
 
-    public static function search(string $query): array
+    public function search(string $query): array
     {
-        $tnt = Search::get_tntsearch();
+        $searchParameters = SearchParameters::create()
+            ->withShowRankingScore(true)
+            ->withQuery($query);
 
-        $res = $tnt->search($query, 12);
+        $results = $this->loupe->search($searchParameters);
 
-        return $res;
+        return $results->toArray();
     }
 
-    public static function search_fuzzy(string $query): array
+    private function getLoupe()
     {
-        $tnt = Search::get_tntsearch();
-        $tnt->fuzziness = true;
+        $configuration = Configuration::create();
 
-        $res = $tnt->search($query, 12);
+        $loupeFactory = new LoupeFactory();
 
-        return $res;
+        $loupe = $loupeFactory->create(rex_path::addonData("simplesearch", "loupe.db"), $configuration);
+
+        return $loupe;
     }
 
-    public static function get_tntsearch(): TNTSearch
+    public function delete_index_for_article(int $article_id): void
     {
-        $db_config = rex::getDbConfig(1);
-
-        $tnt = new TNTSearch;
-
-        $tnt->loadConfig([
-            'driver'    => 'mysql',
-            'host'      => $db_config->host,
-            'database'  => $db_config->name,
-            'username'  => $db_config->login,
-            'password'  => $db_config->password,
-            'storage'   => rex_path::addonData('simplesearch'),
-            'stemmer'   => \TeamTNT\TNTSearch\Stemmer\GermanStemmer::class //optional
-        ]);
-
-        $tnt->selectIndex("articles.index");
-
-        return $tnt;
+        $this->loupe->deleteDocument($article_id);
     }
 
-    public static function delete_index_for_article(int $article_id): void
-    {
-        $tnt = Search::get_tntsearch();
-        $index = $tnt->getIndex();
-        $index->delete($article_id);
-    }
-
-    public static function status_update($ep): void
+    public function status_update($ep): void
     {
         $article_id =  $ep->getParams()['id'];
         $newstatus = $ep->getParams()['status'];
 
         if ($newstatus === 1) {
-            Search::update_article($article_id);
+            $this->update_article($article_id);
         } else {
-            Search::delete_index_for_article($article_id);
+            $this->delete_index_for_article($article_id);
         }
     }
 }
