@@ -1,6 +1,10 @@
 # Changelog
 
 
+## Version 2.1.0 // 08.09.2023
+- add statistics page for search terms
+
+
 ## Version 2.0.1 // 07.09.2023
 - fix version number in package.yml
 
