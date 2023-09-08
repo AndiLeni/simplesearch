@@ -12,6 +12,7 @@ use Loupe\Loupe\Config\TypoTolerance;
 use Loupe\Loupe\Configuration;
 use Loupe\Loupe\LoupeFactory;
 use Loupe\Loupe\SearchParameters;
+use rex_sql;
 
 class Search
 {
@@ -76,6 +77,14 @@ class Search
             ->withQuery($query);
 
         $results = $this->loupe->search($searchParameters);
+
+        // update searchterms table for statistics, only if request is made in frontend
+        if (rex::isFrontend()) {
+            $sql = rex_sql::factory();
+            $sql_insert = 'INSERT INTO ' . rex::getTable('simplesearch_searchterms') . ' (term,resultcount) VALUES ("' . addslashes($query) . '",1)  
+                ON DUPLICATE KEY UPDATE resultcount = resultcount + 1;';
+            $sql->setQuery($sql_insert);
+        }
 
         return $results->toArray();
     }

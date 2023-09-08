@@ -13,6 +13,8 @@ page:
             title: "Suche testen"
         build:
             title: "Artikel indizieren oder updaten"
+        stats:
+            title: "Statistiken"
 
 
 requires:
